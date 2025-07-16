@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     /**
      * Trata exceção de header obrigatório ausente
      */
-    @ExceptionHandler(MissingRequestHeaderException.class)
+    @ExceptionHandler(MissingHeaderException.class)
     public ResponseEntity<ErrorResponseDTO> handleMissingHeaderException(
             MissingRequestHeaderException ex, WebRequest request) {
 
