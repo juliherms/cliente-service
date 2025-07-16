@@ -5,6 +5,7 @@ import com.github.juliherms.clienteService.dto.ClienteRequestDTO;
 import com.github.juliherms.clienteService.dto.ClienteResponseDTO;
 import com.github.juliherms.clienteService.exception.ClienteNotFoundException;
 import com.github.juliherms.clienteService.exception.DuplicateCpfException;
+import com.github.juliherms.clienteService.exception.MissingHeaderException;
 import com.github.juliherms.clienteService.service.ClienteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -193,10 +196,20 @@ class ClienteControllerTest {
 
     @Test
     void naoDeveListarClientesSemHeader() throws Exception {
-        // When & Then
-        mockMvc.perform(get("/api/clientes"))
+        // When
+
+        MvcResult result = mockMvc.perform(get("/api/clientes"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Header 'sistemaOrigem' é obrigatório para operações de consulta"));
+                .andReturn();
+
+        // Then
+        Throwable resolved = result.getResolvedException();
+        assertThat(resolved)
+                .as("deve lançar MissingHeaderException")
+                .isInstanceOf(MissingHeaderException.class);
+
+        assertThat(resolved.getMessage())
+                .isEqualTo("Header 'sistemaOrigem' é obrigatório para operações de consulta");
     }
 
     @Test
@@ -219,7 +232,7 @@ class ClienteControllerTest {
         // Given
         ClienteResponseDTO clienteAtualizado = new ClienteResponseDTO(
                 1L,
-                "12345678901",
+                "91267741007",
                 "João Silva Santos",
                 LocalDate.of(1990, 5, 15),
                 new BigDecimal("6000.00"),
@@ -232,7 +245,7 @@ class ClienteControllerTest {
                 .thenReturn(clienteAtualizado);
 
         ClienteRequestDTO clienteRequest = new ClienteRequestDTO(
-                "12345678901",
+                "91267741007",
                 "João Silva Santos",
                 LocalDate.of(1990, 5, 15),
                 new BigDecimal("6000.00"),

@@ -32,7 +32,7 @@ class ClienteRepositoryTest {
     @BeforeEach
     void setUp() {
         cliente1 = new Cliente(
-                "12345678901",
+                "84957281092",
                 "João Silva",
                 LocalDate.of(1990, 5, 15),
                 new BigDecimal("5000.00"),
@@ -42,7 +42,7 @@ class ClienteRepositoryTest {
         );
 
         cliente2 = new Cliente(
-                "98765432100",
+                "04497909085",
                 "Maria Santos",
                 LocalDate.of(1985, 12, 20),
                 new BigDecimal("7500.00"),
@@ -60,7 +60,7 @@ class ClienteRepositoryTest {
         // Then
         assertThat(clienteSalvo).isNotNull();
         assertThat(clienteSalvo.getId()).isNotNull();
-        assertThat(clienteSalvo.getCpf()).isEqualTo("12345678901");
+        assertThat(clienteSalvo.getCpf()).isEqualTo("84957281092");
         assertThat(clienteSalvo.getNome()).isEqualTo("João Silva");
     }
 
@@ -70,7 +70,7 @@ class ClienteRepositoryTest {
         entityManager.persistAndFlush(cliente1);
 
         // When
-        Optional<Cliente> clienteEncontrado = clienteRepository.findByCpf("12345678901");
+        Optional<Cliente> clienteEncontrado = clienteRepository.findByCpf("84957281092");
 
         // Then
         assertThat(clienteEncontrado).isPresent();
@@ -92,7 +92,7 @@ class ClienteRepositoryTest {
         entityManager.persistAndFlush(cliente1);
 
         // When
-        boolean existe = clienteRepository.existsByCpf("12345678901");
+        boolean existe = clienteRepository.existsByCpf("84957281092");
         boolean naoExiste = clienteRepository.existsByCpf("00000000000");
 
         // Then
